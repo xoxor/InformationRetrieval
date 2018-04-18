@@ -1,0 +1,89 @@
+#**
+ *  Render a hit representing a Product
+ *  assumed to have a field called "name"
+ *#
+<html>
+	#set($ind ="")
+	#if($doc.getFieldValue('indirizzo'))
+		#set($ind = "$doc.getFieldValue('indirizzo')")
+	#end
+	#if($doc.getFieldValue('comune'))
+		#set($ind = "$ind,%20$doc.getFieldValue('comune')")
+	#end
+	#if($doc.getFieldValue('cap'))
+		#set($ind = "$ind,%20$doc.getFieldValue('cap')")
+	#end
+
+	<div class="result-title"><b>#field('denominazione')</b>
+	</div>
+  <div class="map">
+	<iframe width="100%" height="240" id="gmap_canvas" src="https://maps.google.com/maps?q=$ind&t=&z=14&ie=UTF8&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><script src="http://www.embedgooglemap.net/mapscript.js"></script><a href="http://www.embedgooglemap.net"> </a>
+	</div>
+
+#*
+	<iframe width="100%" height="240" id="gmap_canvas" src="https://maps.google.com/maps?q=$ind&t=&z=14&ie=UTF8&iwloc=Boutput=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><script src="http://www.embedgooglemap.net/mapscript.js"></script><br>embed google map by <a href="http://www.embedgooglemap.net">embedgooglemap.net</a>
+
+	<iframe width="100%" height="240" src="https://www.maps.ie/create-google-map/map.php?width=100%&amp;height=240&amp;hl=en&amp;q=$ind		+($doc.getFieldValue('denominazione'))&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.mapsdirections.info/it/misura-distanza-area-google-maps.html">google maps distanze km</a></iframe><br />
+
+	
+	<div><a target="_map" href="http://maps.google.com/?q=$store&amp;source=embed">See on Map</a></div></div>
+
+*#
+
+	<div>Tipo Scuola: #field('tipo_scuola')</div>
+	<div>Comune: #field('comune')</div>
+	
+	#if($doc.getFieldValue('indirizzo'))
+	<div>Indirizzo: #field('indirizzo')</div>
+	#end
+
+	#if($doc.getFieldValue('cap'))
+	<div>CAP: #field('cap')</div>
+	#end
+	
+	#if($doc.getFieldValue('telefono'))
+	<div>Numero telefonico: #field('telefono')</div>
+	#end
+
+	#if($doc.getFieldValue('fax'))
+	<div>Fax: #field('fax')</div>
+	#end
+
+	#if($doc.getFieldValue('sito_web'))
+	#set($web=$doc.getFieldValue('sito_web'))
+	<div>Sito Web: <a href="http://$web">$web</a> </div>
+	#end
+
+	#if($doc.getFieldValue('email'))
+	<div>Email: #field('email')</div>
+	#end
+
+	#if($doc.getFieldValue('pec'))
+	<div>Pec: #field('pec')</div>
+	#end
+
+#*
+	<div class="mlt">
+		#set($mlt = $mltResults.get($docId))
+		#set($mltOn = $params.getBool('mlt'))
+		#if($mltOn == true)<div class="field-name">Similar Items</div>#end
+		#if ($mltOn && $mlt && $mlt.size() > 0)
+		<ul>
+		  #foreach($mltHit in $mlt)
+		    #set($mltId = $mltHit.getFieldValue('id'))
+		    <li><div><a href="#url_for_home?q=id:$mltId">$mltId</a></div><div><span class="field-name">Name:</span> $mltHit.getFieldValue('name')</div>
+		      <div><span class="field-name">Price:</span> $!number.currency($mltHit.getFieldValue('price')) <span class="field-name">In Stock:</span> $mltHit.getFieldValue('inStock')</div> 
+
+		    </li>
+		  #end
+		</ul>
+		#elseif($mltOn && $mlt.size() == 0)
+		  <div>No Similar Items Found</div>
+		#end
+	</div>
+*#
+	#parse('debug.vm')
+
+</html>
+
+

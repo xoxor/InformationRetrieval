@@ -1,0 +1,12 @@
+#**
+ *  Provides cynamic spelling suggestions
+ *  as you type in the search form
+ *#
+
+#foreach($t in $response.response.terms.denominazione_tok)
+	#if($foreach.count > 7)
+		#break
+	#end
+  $t.key
+#end
+
